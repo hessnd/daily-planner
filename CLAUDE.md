@@ -66,11 +66,24 @@ npm run check   # tsc type-check
 ```
 
 ## Deploy
-The app is purely static — serve `dist/public/` from any host:
+
+### Vercel (primary — git-push deploys)
+The project is linked to Vercel via the GitHub repo (`hessnd/daily-planner`).
+Every push to `main` triggers a production deployment automatically.
+
 ```bash
-vercel deploy dist/public --prod
-# or
+git push   # → triggers Vercel build → dist/public/ served at vercel.app URL
+```
+
+Production URL: https://morning-planner-p9i2hmde0-nick-hess-projects-ec1c7357.vercel.app  
+Vercel project: `nick-hess-projects-ec1c7357/morning-planner`  
+Config: `vercel.json` (buildCommand, outputDirectory, framework: null)
+
+### Manual / other hosts
+```bash
+npm run build          # output → dist/public/
 netlify deploy --dir=dist/public --prod
+# or: upload dist/public/ to any static host
 ```
 
 ## Coding conventions
