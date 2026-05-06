@@ -21,6 +21,7 @@ import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { useTheme } from "@/lib/theme";
+import { useLocalStorage } from "@/lib/useLocalStorage";
 import {
   Sun,
   Moon,
@@ -49,15 +50,15 @@ const SLOT_COLORS: Record<string, string> = {
 export default function Home() {
   const { theme, toggle } = useTheme();
 
-  // ── Form state ──
-  const [sleepHours, setSleepHours] = useState(7.5);
-  const [currentWake, setCurrentWake] = useState("07:00"); // user's current habitual wake
-  const [fallAsleepBuffer, setFallAsleepBuffer] = useState(15);
-  const [planStartDate, setPlanStartDate] = useState(() => {
-    const d = new Date();
-    return d.toISOString().slice(0, 10);
-  });
-  const [slots, setSlots] = useState<Slot[]>(DEFAULT_SLOTS);
+  // ── Form state (persisted to localStorage) ──
+  const [sleepHours, setSleepHours] = useLocalStorage("sleepHours", 7.5);
+  const [currentWake, setCurrentWake] = useLocalStorage("currentWake", "07:00");
+  const [fallAsleepBuffer, setFallAsleepBuffer] = useLocalStorage("fallAsleepBuffer", 15);
+  const [planStartDate, setPlanStartDate] = useLocalStorage(
+    "planStartDate",
+    new Date().toISOString().slice(0, 10),
+  );
+  const [slots, setSlots] = useLocalStorage<Slot[]>("slots", DEFAULT_SLOTS);
   const [newSlotLabel, setNewSlotLabel] = useState("");
   const [newSlotDuration, setNewSlotDuration] = useState(10);
 

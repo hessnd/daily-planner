@@ -1,15 +1,18 @@
-import { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import { createContext, useContext, useEffect, ReactNode } from "react";
+import { useLocalStorage } from "./useLocalStorage";
 
 type Theme = "light" | "dark";
 type ThemeCtx = { theme: Theme; toggle: () => void };
 
 const Ctx = createContext<ThemeCtx>({ theme: "light", toggle: () => {} });
 
+function detectSystemTheme(): Theme {
+  if (typeof window === "undefined") return "light";
+  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+}
+
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setTheme] = useState<Theme>(() => {
-    if (typeof window === "undefined") return "light";
-    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-  });
+  const [theme, setTheme] = useLocalStorage<Theme>("theme", detectSystemTheme());
 
   useEffect(() => {
     const root = document.documentElement;
